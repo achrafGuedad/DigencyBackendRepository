@@ -57,14 +57,12 @@ public class PdfGeneratorService {
         Paragraph paragraph8 = new Paragraph("Date de Naissance : "+personne.getDateNaissance(), fontParagraph);
         paragraph8.setAlignment(Paragraph.ALIGN_LEFT);
 
-        Paragraph paragraph9 = new Paragraph("Image : "+decompressBytes(personne.getImage()), fontParagraph);
+       /* Paragraph paragraph9 = new Paragraph("Image : "+decompressBytes(personne.getImage()), fontParagraph);
+        paragraph9.setAlignment(Paragraph.ALIGN_RIGHT);
+*/
+        Paragraph paragraph9 = new Paragraph("Image : ", fontParagraph);
         paragraph9.setAlignment(Paragraph.ALIGN_RIGHT);
 
-        /*BaseFont bf=BaseFont.createFont("src/main/resources/Amiri-regular.ttf",BaseFont.IDENTITY_H,BaseFont.EMBEDDED);
-        Font font=new Font(bf,12,Font.NORMAL);
-        Paragraph arabicText = new Paragraph("مرحبا بالعالم");
-        arabicText.setFont(FontFactory.getFont("Arial Unicode MS", BaseFont.IDENTITY_H, BaseFont.EMBEDDED));
-*/
 
         document.add(paragraph1);
         document.add(paragraph3);
