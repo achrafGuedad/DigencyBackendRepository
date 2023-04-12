@@ -9,7 +9,11 @@ import org.springframework.stereotype.Service;
 import sun.font.FontFamily;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
+
 @Service
 public class PdfGeneratorService {
 
@@ -34,26 +38,26 @@ public class PdfGeneratorService {
         paragraph3.setAlignment(Paragraph.ALIGN_LEFT);
 
 
-        Paragraph paragraph4 = new Paragraph("Nom : ", fontParagraph);
+        Paragraph paragraph4 = new Paragraph("Nom : "+personne.getNom(), fontParagraph);
         paragraph4.setAlignment(Paragraph.ALIGN_LEFT);
 
 
-        Paragraph paragraph5 = new Paragraph("cin : ", fontParagraph);
+        Paragraph paragraph5 = new Paragraph("cin : "+personne.getCin(), fontParagraph);
         paragraph5.setAlignment(Paragraph.ALIGN_LEFT);
 
 
-        Paragraph paragraph6 = new Paragraph("Profession : ", fontParagraph);
+        Paragraph paragraph6 = new Paragraph("Profession : "+personne.getProfession(), fontParagraph);
         paragraph6.setAlignment(Paragraph.ALIGN_LEFT);
 
 
-        Paragraph paragraph7 = new Paragraph("Type de carte : ", fontParagraph);
+        Paragraph paragraph7 = new Paragraph("Type de carte : "+personne.getTypeCarte(), fontParagraph);
         paragraph7.setAlignment(Paragraph.ALIGN_LEFT);
 
 
-        Paragraph paragraph8 = new Paragraph("Date de Naissance : ", fontParagraph);
+        Paragraph paragraph8 = new Paragraph("Date de Naissance : "+personne.getDateNaissance(), fontParagraph);
         paragraph8.setAlignment(Paragraph.ALIGN_LEFT);
 
-        Paragraph paragraph9 = new Paragraph("Image : ", fontParagraph);
+        Paragraph paragraph9 = new Paragraph("Image : "+decompressBytes(personne.getImage()), fontParagraph);
         paragraph9.setAlignment(Paragraph.ALIGN_RIGHT);
 
         /*BaseFont bf=BaseFont.createFont("src/main/resources/Amiri-regular.ttf",BaseFont.IDENTITY_H,BaseFont.EMBEDDED);
@@ -74,5 +78,27 @@ public class PdfGeneratorService {
 
     }
 
+
+
+
+
+
+
+    public static byte[] decompressBytes(byte[] data) {
+        Inflater inflater = new Inflater();
+        inflater.setInput(data);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+        byte[] buffer = new byte[1024];
+        try {
+            while (!inflater.finished()) {
+                int count = inflater.inflate(buffer);
+                outputStream.write(buffer, 0, count);
+            }
+            outputStream.close();
+        } catch (IOException ioe) {
+        } catch (DataFormatException e) {
+        }
+        return outputStream.toByteArray();
+    }
 
 }

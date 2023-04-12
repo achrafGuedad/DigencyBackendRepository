@@ -22,9 +22,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
+
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
+
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@Configuration
 public class PersonneRestController {
 
 
@@ -35,22 +39,6 @@ public class PersonneRestController {
     @Autowired
     private PdfGeneratorService pdfGeneratorService;
 
-
-
-
-    @GetMapping("/pdf/generate/{idPersonne}")
-    public void generatePDF(HttpServletResponse response,@PathVariable("idPersonne") int idPersonne) throws IOException {
-        Personne personneToFind= personneDao.getById(idPersonne);
-        response.setContentType("application/pdf");
-        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
-        String currentDateTime = dateFormatter.format(new Date());
-
-        String headerKey = "Content-Disposition";
-        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
-        response.setHeader(headerKey, headerValue);
-
-        this.pdfGeneratorService.export(response,personneToFind);
-    }
 
 
 
@@ -74,6 +62,28 @@ public class PersonneRestController {
         System.out.println("Compressed Image Byte Size - " + outputStream.toByteArray().length);
 
         return outputStream.toByteArray();
+    }
+
+
+
+
+
+
+
+
+    @GetMapping("/pdf/generate/{idPersonne}")
+    public void generatePDF(HttpServletResponse response,@PathVariable("idPersonne") int idPersonne) throws IOException {
+        Personne personneToFind= personneDao.getById(idPersonne);
+
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:hh:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date());
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=pdf_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+
+        this.pdfGeneratorService.export(response,personneToFind);
     }
 
 
